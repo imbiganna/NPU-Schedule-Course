@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src="mainjs2.js">
+</script>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>NPU排課小助手</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
+    <link rel="stylesheet" href="assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+</head>
+
+<body style="background: rgb(241,247,252);">
+    <nav class="navbar navbar-light navbar-expand-md-12 navigation-clean" style="background: rgb(241,247,252);">
+        <div class="container"><a class="navbar-brand"  style="font-size: 24px;">NPU排課小幫手</a>
+             <a href="https://www.instagram.com/imbiganna">系統有問題嗎？ 聯絡作者</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <font color = "red">建議搜尋通識課程時使用所有科系下去搜尋！！</font>因為在課程表上對應到的通識課通常不是該系所而是該院所，用指定系所而不是院所搜尋會是空白<br>
+        <p>如果<font color = 'red'>找不到你想要的課程</font>請打一個字搜尋試試並<font color = 'red'>指定所有科系不要過濾科系</font>，例如統計學，僅搜尋'統'字並點選所有科系即可</p>
+        <p>很長一段時間查不到課程請直接右上角向我回報，謝謝你！</p>
+
+
+        <div class="row">
+            <div class="col-md-6" style="background: rgb(241,247,252);border-style: none;font-size: 44px;width: 599px;padding: 25px;">
+                <form id='getCou'>
+                    <p style="font-size: 25px;filter: brightness(0%);font-style: normal;font-weight: bold;">課程查詢</p>
+                    
+                        <select class="custom-select " id = "gen">
+                            <option value="%" selected="">篩選通識，此項未選擇即不篩選</option><option value="E">只查通識，不要其他科目</option><option value="EH">人文藝術</option><option value="EN">自然科學</option><option value="ES">社會科學</option></select>
+                        <select class="custom-select " id = "dept">
+                            <option value="%">所有科系</option><option value="0100">水產養殖系</option><option value="0200">航運管理系</option><option value="0300">電信工程系</option><option value="0400">資訊管理系</option><option value="0500">資訊工程系</option><option value="0600">餐旅管理系</option><option value="0700">應用外語系</option><option value="1100">食品科學系</option><option value="1600">行銷與物流管理系</option><option value="1500">電機工程系</option><option value="UH00">人文暨管理學院</option><option value="US00">海洋資源暨工程學院</option><option value="UT00">觀光休閒學院</option><option value="XS00">個別服務教育</option><option value="US50">食品科學系碩士班</option><option value="UT04">觀光休閒系</option><option value="XP00">體育室</option><option value="US60">水產養殖系水產資源與養殖碩士班</option><option value="UT05">觀光休閒系碩士班</option><option value="US70">電機工程系電資碩士班</option><option value="UM20">行銷與物流管理系服務業經營管理碩士班</option><option value="UT06">觀光休閒系碩士在職專班</option><option value="UM21">行銷與物流管理系服務業經營管理碩士在職專班</option><option value="1410">海洋遊憩系</option><option value="1510">電機科</option><option value="XD00">基礎能力教學中心</option></select>
+                    </select>
+                    <input class="form-control" type="text" style="width: 549;height: 20;" id='couName' placeholder='課程名稱' >
+                    <button class="btn btn-primary " type="button" onclick='getCourse();' id="searchBtn" >
+                        <span class="spinner-border spinner-border-sm" role="done" id="loadingBtn" hidden></span>
+                        查詢
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-6 " style="background: rgb(241,247,252);box-shadow: 0px 0px 0px;">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="font-size: 18px;">課程<br>名稱</br></th>
+                            <th style="font-size: 18px;">上課<br>時間</br></th>
+                            <th style="font-size: 18px;">新增<br>排課</br></th>
+                            <th style="font-size: 18px;">詳細<br>資料</br></th>
+                        </tr>
+                        </thead>
+                        <tbody id = 'courseList'>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2 class="text-center">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#selCourse">
+                已排課程列表
+            </button>
+        </h2>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="selCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">目前已排課程</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id = goCourseList>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="font-size: 18px;">課程<br>名稱</br></th>
+                            <th style="font-size: 18px;">課程<br>代號</br></th>
+                            <th style="font-size: 18px;">移除<br>課程</br></th>
+                        </tr>
+                        </thead>
+                        <tbody id = 'selCourseList'>
+                        <td>目前還沒排課唷</td>
+                        </tbody>
+                        <p id = "selectCount">已選學分數：...</p>
+
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+
+                     </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="background: rgb(241,247,252);border-style: none;font-size: 14px;padding: 0px;">
+         <table class="table table-bordered col-md-12 clearfix hidden-xs" >
+                <thead>
+                 <tr>
+                        <th style="font-size: 14px;">日期<br>節次</th>
+                        <th style="font-size: 14px;">（一）</th>
+                        <th style="font-size: 14px;">（二）</th>
+                        <th style="font-size: 14px;">（三）</th>
+                        <th style="font-size: 14px;">（四）</th>
+                        <th style="font-size: 14px;">（五）</th>
+                     </tr>
+                </thead>
+             <tbody id = 'TableList' class = "table table-bordered">
+                                        
+            </tbody>
+        </table>
+    </div>
+</div>
+    <div class="modal fade" id="coudetial" tabindex="-1" role="dialog" aria-labelledby="coudetialLab" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="coudetialLab">課程詳細資料</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id = "coudtlList">
+                    <p style="font-size: 18px;">課程名稱</p>
+                    <p style="font-size: 18px;">課程學分</p>
+                    <p style="font-size: 18px;">開課班級</p>
+                    <p style="font-size: 18px;">課程代號</p>
+                    <p style="font-size: 18px;">上課時間</p>
+                    <p style="font-size: 18px;">可選人數</p>
+                    <p style="font-size: 18px;">授課教師</p>
+                    <p style="font-size: 18px;">上課教室</p>
+                    <p style="font-size: 18px;">必選修</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    
+    <div style="background: rgb(241,247,252);"></div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script >
+    	$('#getCou').submit(function () {
+		 getCourse();
+		 return false;
+		});
+    </script>
+</body>
+
+</html>
